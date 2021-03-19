@@ -1,0 +1,104 @@
+#define SWITCH_RX       STICK_1_X
+#define SWITCH_RY       STICK_1_Y
+#define SWITCH_LY       STICK_2_Y
+#define SWITCH_LX       STICK_2_X
+#define SWITCH_ZL       BUTTON_8
+#define SWITCH_X        BUTTON_14
+#define SWITCH_A        BUTTON_15
+#define SWITCH_B        BUTTON_16
+#define SWITCH_Y        BUTTON_17
+#define SWITCH_PLUS     BUTTON_3
+
+fix32 lastL2;
+fix32 lastBreakLY;
+fix32 lastAccLX;
+fix32 lastBreakRX;
+bool lastOnOff;
+uint32 pressingDownTime;
+bool isPressingDown;
+uint32 needPressDownAfterCount;
+uint32 pressingUpTime;
+bool isPressingUp;
+uint32 needPressUpAfterCount;
+fix32 lastUpDownPosition;
+
+
+combo pressUp {
+    if (isPressingUp) {
+        needPressUpAfterCount++;
+    } else {
+        isPressingUp = TRUE;
+        set_val(SWITCH_PLUS, 100);
+    }
+}
+combo pressDown {
+    if (isPressingDown) {
+        needPressDownAfterCount++;
+    } else {
+        isPressingDown = TRUE;
+        set_val(SWITCH_Y, 100);
+    }
+}
+combo handleUpDown {
+if (isPressingUp) {
+        pressingUpTime++;
+        if (pressingUpTime < 100) {
+            set_val(SWITCH_PLUS, 100);
+        } else if (pressingUpTime >= 200) {
+            isPressingUp = FALSE;
+            pressingUpTime = 0;
+        }
+    } else if (isPressingDown) {
+        pressingDownTime++;
+        if (pressingDownTime < 100) {
+            set_val(SWITCH_Y, 100);
+        } else if (pressingDownTime >= 200) {
+            isPressingDown = FALSE;
+            pressingDownTime = 0;
+        }
+    }
+    if (needPressUpAfterCount > 0) {
+        needPressUpAfterCount--;
+        combo_run(pressUp);
+    } else if (needPressDownAfterCount > 0) {
+        needPressDownAfterCount--;
+        combo_run(pressDown);
+    }
+    if ((!lastOnOff && is_active(SWITCH_LY)) || (lastOnOff && is_release(SWITCH_LY))) {
+        lastOnOff = !lastOnOff;
+        if (get_val(SWITCH_LY) == 100.0) {
+            combo_run(pressDown);
+        } else if (get_val(SWITCH_LY) == -100.0) {
+            combo_run(pressUp);
+        } else {
+            if (lastUpDownPosition != -100.0) {
+                combo_run(pressDown);
+            }
+        }
+    }
+    lastUpDownPosition = get_val(SWITCH_LY);
+}
+combo handleBlack {
+    if (is_active(BUTTON_17)) {
+        set_val(SWITCH_A, 100);
+        if (!isPressingDown) {
+            set_val(BUTTON_17, 0);
+        }
+    } else if (is_release(BUTTON_17)) {
+        set_val(SWITCH_A, 0);
+    }   
+}
+combo handleYellow {
+    if (is_active(BUTTON_15)) {
+        set_val(SWITCH_X, 100);
+    } else if (is_release(BUTTON_15)) {
+        set_val(SWITCH_X, 0);
+    }   
+}
+combo handleWhite {
+    if (is_active(BUTTON_16)) {
+        set_val(SWITCH_B, 100);
+    } else if (is_release(BUTTON_16)) {
+        set_val(SWITCH_B, 0);
+    }   
+}
