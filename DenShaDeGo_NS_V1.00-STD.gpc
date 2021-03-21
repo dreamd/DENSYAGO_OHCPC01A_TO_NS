@@ -16,17 +16,17 @@ combo handleStick {
         }
 
         lastL2 = 100.0;
-        lastBreakLY = -90.0;
+        lastBreakLY = -100.0;
         lastAccLX = 0.0;
-        lastBreakRX = 90.0;
+        lastBreakRX = 100.0;
     } else if (!btn8 && !btn5 && btn2 && !btn3) {
         // B8 0010
         set_val(BUTTON_2, 0.0);
         
         lastL2 = 0.0;
-        lastBreakLY = -90.0;
+        lastBreakLY = -100.0;
         lastAccLX = 0.0;
-        lastBreakRX = 90.0;
+        lastBreakRX = 100.0;
     } else if (!btn8 && !btn5 && btn2 && btn3) {
         //B7 0011
         set_val(BUTTON_2, 0.0);
@@ -35,9 +35,9 @@ combo handleStick {
         }
         
         lastL2 = 0.0;
-        lastBreakLY = -80.0;
+        lastBreakLY = -85.0;
         lastAccLX = 0.0;
-        lastBreakRX = 80.0;
+        lastBreakRX = 85.0;
     } else if (!btn8 && btn5 && !btn2 && !btn3) {
         //B6 0100
         set_val(BUTTON_5, 0.0);
@@ -152,7 +152,7 @@ combo handleStick {
         set_val(SWITCH_ZL, 0.0);
         
         lastL2 = 0.0;
-        lastBreakLY = 80.0;
+        lastBreakLY = 85.0;
         lastAccLX = 0.0;
         lastBreakRX = 0.0;
     } else if (btn8 && btn5 && btn2 && btn3) {
@@ -166,7 +166,7 @@ combo handleStick {
         set_val(SWITCH_ZL, 0.0);
 
         lastL2 = 0.0;        
-        lastBreakLY = 90.0;
+        lastBreakLY = 100.0;
         lastAccLX = 0.0;
         lastBreakRX = 0.0;
     }
